@@ -1,0 +1,9 @@
+torch==2.1.0
+torchaudio==2.1.0
+torchvision==0.16.0
+TTS==0.21.0
+numpy==1.22.0
+scipy>=1.11.2
+pydub
+soundfile
+networkx==2.8.8
