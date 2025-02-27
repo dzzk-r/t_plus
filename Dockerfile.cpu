@@ -1,0 +1,18 @@
+# Base image with Python
+FROM python:3.10
+
+# Install dependencies
+RUN apt-get update && apt-get install -y libsndfile1 && rm -rf /var/lib/apt/lists/*
+
+# Install PyTorch (CPU-only)
+RUN pip install --no-cache-dir torch torchvision torchaudio
+
+# Copy project files
+COPY . /app
+WORKDIR /app
+
+# Set environment variables
+ENV FORCE_DEVICE="cpu"
+
+# Run the script
+ENTRYPOINT ["python", "gen.py"]
