@@ -1,88 +1,88 @@
-// # Torch TTS Setup
+# Torch TTS Setup
 
-Этот репозиторий предоставляет инструкции и файлы для установки и работы с `torch` и `TTS` на Python 3.10.16.
+This repository provides setup instructions and files for `torch` and `TTS` on Python 3.10.16.
 
-## 1️⃣ Установка
+## 1️⃣ Installation
 
-### 🔹 1.1 Установка `pyenv`
+### 🔹 1.1 Install `pyenv`
 
 **Windows:**
 ```bash
-    winget install pyenv-win
+winget install pyenv-win
 ```
 
 **Ubuntu:**
 ```bash
-    curl https://pyenv.run | bash
+curl https://pyenv.run | bash
 ```
 
 **macOS:**
 ```bash
-    brew install pyenv
+brew install pyenv
 ```
 
-### 🔹 1.2 Установка Python 3.10.16
+### 🔹 1.2 Install Python 3.10.16
 ```bash
-    pyenv install 3.10.16
+pyenv install 3.10.16
 pyenv local 3.10.16
-# Привязка версии Python к текущей папке
+# Bind Python version to the current folder
 ```
 
-### 🔹 1.3 Создание и активация виртуального окружения
+### 🔹 1.3 Create and Activate Virtual Environment
 ```bash
-    pyenv exec python -m venv venv
+pyenv exec python -m venv venv
 source venv/bin/activate
 ```
 
-**Для Windows (PowerShell):**
+**For Windows (PowerShell):**
 ```powershell
 pyenv exec python -m venv venv
 venv\Scripts\Activate
 ```
 
-### 🔹 1.4 Установка зависимостей
+### 🔹 1.4 Install Dependencies
 ```bash
-    pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-**Обновление зависимостей:**
+**Update dependencies:**
 ```bash
-    pip install --upgrade -r requirements.txt
+pip install --upgrade -r requirements.txt
 ```
 
-### 🔹 1.5 Проверка версии `torch`
+### 🔹 1.5 Verify `torch` Version
 ```bash
-    python -c "import torch; print(torch.__version__)"
+python -c "import torch; print(torch.__version__)"
 ```
 
-### 🔹 1.6 Проверка доступных устройств (CUDA/MPS/CPU)
+### 🔹 1.6 Check Available Devices (CUDA/MPS/CPU)
 ```bash
-    python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, MPS: {torch.backends.mps.is_available()}')"
+python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, MPS: {torch.backends.mps.is_available()}')"
 ```
 
-📌 **Если CUDA и MPS отсутствуют**, будет использован CPU.
+📌 **If CUDA and MPS are unavailable, CPU will be used.**
 
 ---
-## 2️⃣ Установка `torch` с CUDA (только для Windows/Linux с NVIDIA GPU)
+## 2️⃣ Install `torch` with CUDA (Windows/Linux with NVIDIA GPU Only)
 ```bash
-    pip install torch==2.1.0+cu118 torchaudio==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==2.1.0+cu118 torchaudio==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
-📌 На macOS использовать стандартную версию `torch`, т.к. CUDA не поддерживается.
+📌 On macOS, use the standard `torch` version since CUDA is not supported.
 
 ---
-## 3️⃣ Запуск тестового синтеза речи
+## 3️⃣ Run Test Speech Synthesis
 ```bash
-    python gen.py
+python gen.py
 ```
 
 ---
-## 4️⃣ Автоматическая установка
-Для быстрой установки можно использовать скрипты:
+## 4️⃣ Automatic Setup
+To quickly set up the environment, use the scripts:
 
 **Linux/macOS:**
 ```bash
-    bash setup.sh
+bash setup.sh
 ```
 
 **Windows (PowerShell):**
@@ -91,107 +91,109 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
 ---
-## 5️⃣ 🚀 Запуск скрипта с разными параметрами
+## 5️⃣ 🚀 Running the Script with Different Parameters
 
-**Для macOS (MPS)**
+**For macOS (MPS)**
 ```bash
-    PYTORCH_ENABLE_MPS_FALLBACK=1 FORCE_DEVICE="mps" pyenv exec python gen.py "Привет, мир!"
+PYTORCH_ENABLE_MPS_FALLBACK=1 FORCE_DEVICE="mps" pyenv exec python gen.py "Hello, world!"
 ```
 
-🔹 **PYTORCH_ENABLE_MPS_FALLBACK=1** — включает CPU fallback для неподдерживаемых операций на MPS.  
-🔹 **FORCE_DEVICE="mps"** — задает использование Apple Metal (MPS).
+🔹 **PYTORCH_ENABLE_MPS_FALLBACK=1** — Enables CPU fallback for unsupported MPS operations.  
+🔹 **FORCE_DEVICE="mps"** — Uses Apple Metal (MPS).
 
 ---
-**Для Windows/Linux с NVIDIA (CUDA)**
+**For Windows/Linux with NVIDIA (CUDA)**
 ```bash
-    FORCE_DEVICE="cuda" pyenv exec python gen.py "Hello, world!"
+FORCE_DEVICE="cuda" pyenv exec python gen.py "Hello, world!"
 ```
 
-🔹 **FORCE_DEVICE="cuda"** — включает GPU (NVIDIA).  
-🔹 **Если CUDA не доступна**, автоматически переключится на CPU.
+🔹 **FORCE_DEVICE="cuda"** — Enables GPU (NVIDIA).  
+🔹 **If CUDA is unavailable, falls back to CPU.**
 
 ---
-**Для работы на CPU**
+**For CPU-only mode**
 ```bash
-    FORCE_DEVICE="cpu" pyenv exec python gen.py "Привет, CPU!"
+FORCE_DEVICE="cpu" pyenv exec python gen.py "Hello, CPU!"
 ```
 
-🔹 **FORCE_DEVICE="cpu"** — заставляет работать только на CPU.
+🔹 **FORCE_DEVICE="cpu"** — Forces CPU-only execution.
 
 ---
-**Для работы с RTX 4090 / 4080 / 3090**
+**For RTX 4090 / 4080 / 3090 Optimization**
 ```bash
-    FORCE_DEVICE="cuda" python gen.py "Оптимизировано для 4090!"
+FORCE_DEVICE="cuda" python gen.py "Optimized for 4090!"
 ```
 
-🔹 Оптимизация через `torch.backends.cudnn.benchmark = True` в коде.
+🔹 Optimization via `torch.backends.cudnn.benchmark = True`.
 
 ---
-**Общий вызов без явного указания (автовыбор устройства)**
+**General Execution Without Specifying Device (Auto-Selection)**
 ```bash
-    pyenv exec python gen.py "Привет, автоматический режим!"
+pyenv exec python gen.py "Hello, auto mode!"
 ```
 
-🔹 **Скрипт сам определит** `cuda`, `mps` или `cpu`, если `FORCE_DEVICE` не указан.
+🔹 **The script will auto-detect** `cuda`, `mps`, or `cpu` if `FORCE_DEVICE` is not specified.
 
 ---
-## 🔍 6️⃣ Проверка доступности устройств перед запуском:
+## 🔍 6️⃣ Check Device Availability Before Running:
 ```bash
-    python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, MPS: {torch.backends.mps.is_available()}')"
+python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, MPS: {torch.backends.mps.is_available()}')"
 ```
 
-📌 **Если CUDA и MPS отсутствуют**, будет использован CPU.
+📌 **If CUDA and MPS are unavailable, CPU will be used.**
 
-🔥 **Теперь скрипт универсален для macOS (MPS), Windows/Linux (CUDA) и CPU!** 🚀
+🔥 **Now the script is universal for macOS (MPS), Windows/Linux (CUDA), and CPU!** 🚀
 
 ---
 # 7️⃣ Text-to-Speech Generation with TTS
 
-## 7.1 Использование
+## 7.1 Usage
 
-**Генерация аудио из текста**
+**Generate Speech from Text**
 ```bash
-    FORCE_DEVICE="cpu" pyenv exec python gen.py 'Привет, автоматический режим. В рот мне ноги!'
+FORCE_DEVICE="cpu" pyenv exec python gen.py 'Hello, automatic mode!'
 ```
 
 ---
-## 7.2 Пример логов
+## 7.2 Example Logs
 
 ```plaintext
 2025-02-27 03:21:07,401 - INFO -
 
-===== Новый запуск скрипта =====
-🖥️ Используем устройство для модели: cpu
-🎙 Используем устройство для аудио: cpu
-2025-02-27 03:21:12,717 - INFO - Используем устройство для модели: cpu
-2025-02-27 03:21:12,717 - INFO - Используем устройство для аудио: cpu
+===== New Script Execution =====
+🖥️ Using Model Device: cpu
+🎙 Using Audio Device: cpu
+2025-02-27 03:21:12,717 - INFO - Using Model Device: cpu
+2025-02-27 03:21:12,717 - INFO - Using Audio Device: cpu
 > tts_models/multilingual/multi-dataset/xtts_v2 is already downloaded.
 > Using model: xtts
-⏳ Время загрузки модели: 22.58 сек
-2025-02-27 03:21:35,298 - INFO - Время загрузки модели: 22.58 сек
-🎙️ Используем голос из семпла daniel.wav
-📢 Текст для генерации: Привет, автоматический режим. В рот мне ноги!
-> Processing time: 8.536 сек
+⏳ Model Load Time: 22.58 sec
+2025-02-27 03:21:35,298 - INFO - Model Load Time: 22.58 sec
+🎙️ Using Speaker Sample: daniel.wav
+📢 Text to Generate: Hello, automatic mode!
+> Processing time: 8.536 sec
 
-🔍 **Детальные метрики:**
-⏳ Время загрузки модели: 22.58 сек
-⚙️ Время генерации аудио: 8.54 сек
-📊 FPS (кадры в секунду): 0.12
-💾 Использование памяти (до/после): 3571.59 MB → 3658.97 MB
-📂 Размер выходного файла: 0.22 MB
-⚡ CPU загрузка: 25.3%
+🔍 **Detailed Metrics:**
+⏳ Model Load Time: 22.58 sec
+⚙️ Audio Generation Time: 8.54 sec
+📊 FPS (Frames Per Second): 0.12
+💾 Memory Usage (Before/After): 3571.59 MB → 3658.97 MB
+📂 Output File Size: 0.22 MB
+⚡ CPU Load: 25.3%
 🖥️ GPU: N/A
-🔥 TFLOPS (теоретические): 0.00 TFLOPS
-✅ Файл output.wav сгенерирован!
+🔥 TFLOPS (Theoretical): 0.00 TFLOPS
+✅ File `output.wav` Generated!
+2025-02-27 03:21:43,842 - INFO - File `output.wav` Generated!
 ```
 
 ---
-📌 **Дополнительно**
-1. **Для повышения производительности на CUDA** — `torch.backends.cudnn.benchmark = True` (уже включено в коде).
-2. **Для работы на Mac MPS** — `PYTORCH_ENABLE_MPS_FALLBACK=1` (включен по умолчанию).
-3. **Если `gen.py` падает из-за несовместимости библиотек** — попробуйте обновить зависимости:
+📌 **Additional Notes**
+1. **For CUDA Performance Optimization** — `torch.backends.cudnn.benchmark = True` (already enabled in code).
+2. **For macOS MPS Compatibility** — `PYTORCH_ENABLE_MPS_FALLBACK=1` (enabled by default).
+3. **If `gen.py` crashes due to dependency issues** — Try updating dependencies:
 ```bash
-    pip install --upgrade -r requirements.txt
+pip install --upgrade -r requirements.txt
 ```
-    
-🎉 **Теперь ваш проект готов к работе с текст-ту-спич на любом устройстве!** 🚀🔥
+
+🎉 **Now your project is ready for text-to-speech on any device!** 🚀🔥
+
